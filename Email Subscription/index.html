@@ -17,26 +17,36 @@
              
         </form>
        <span id="msg"></span>
+		 <div id="loader" style="display: none;">Sending Email Please Wait!</div>
+    </div>
     </div>
 
 <script>
 	const scriptURL = 'https://script.google.com/macros/s/AKfycbyevZnm2SHGRocaJ9rlszfBGtw2_5eI8WuOeqm5MZBG4AwmfG6PghYbeISq-KFR5DKb/exec'
 	const form = document.forms['submit-to-googlesheet']
 	const msg = document.getElementById("msg")
+	const loader=document.getElementById("loader")
 	
 	form.addEventListener('submit', e => {
 		e.preventDefault()
+			loader.style.display="block";
+		msg.innerHTML='';
 		fetch(scriptURL, { method: 'POST', body: new FormData(form) })
 			.then(response => response.json())
 			.then(response => {
+				loader.style.display='none'
 				msg.innerHTML = "Thank You For Subscribing"
 				setTimeout(function(){
 					msg.innerHTML = ""
 				}, 10000)
 				form.reset()
 			})
-			.catch(error => console.error('Error!', error.message))
+			.catch(error => {
+					loader.style.display="none"
+				console.error('Error!', error.message)
+			})
 	})
 </script>
 </body>
+
 </html>
